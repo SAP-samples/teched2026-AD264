@@ -1,26 +1,49 @@
-# Level 1 Heading
+# Exercise 0 — Getting Started
 
-In this exercise, you will...
+## What you will do
 
-## Level 2 Heading
+| Step | Action |
+|---|---|
+| 1 | Log into the session landscape (BTP, Joule Work) |
+| 2 | Open the Onboarding Task Management Agent in Joule |
+| 3 | Verify you can send a message and receive a response |
 
-After completing these steps you will have....
+## Prerequisites
 
-1.	Click here.
-<br>![](/exercises/ex0/images/00_00_0010.png)
+Your session facilitator will provide:
 
-2.	Insert this code.
-``` abap
- DATA(params) = request->get_form_fields(  ).
- READ TABLE params REFERENCE INTO DATA(param) WITH KEY name = 'cmd'.
-  IF sy-subrc <> 0.
-    response->set_status( i_code = 400
-                     i_reason = 'Bad request').
-    RETURN.
-  ENDIF.
+| Item | Details |
+|---|---|
+| BTP Cockpit URL | Provided on your exercise card |
+| Joule Work URL | Provided on your exercise card |
+| User credentials | Pre-assigned per participant |
+
+## Steps
+
+### 1. Log into Joule Work
+
+Open the Joule Work URL provided on your exercise card. Sign in with the credentials assigned to you.
+
+> If you see a "Session expired" or blank screen, refresh the page and sign in again.
+
+### 2. Open the Onboarding Task Management Agent
+
+From the Joule home screen, locate the **Onboarding Task Management Agent** (also labelled "Onboarding Assistant") in the agent list.
+
+Click to open it. You should see a chat interface with a welcome message.
+
+### 3. Send a test message
+
+Type the following and press Enter:
+
+```
+Hello
 ```
 
-## Summary
+The agent should respond. If you get a response, you are ready to proceed to [Exercise 1](../ex1/).
 
-Now that you have ... 
-Continue to - [Exercise 1 - Exercise 1 Description](../ex1/README.md)
+> If there is no response after 30 seconds, raise your hand — the facilitator will help.
+
+---
+
+[Next: Exercise 1 — Explore the Onboarding Task Management Agent](../ex1/)

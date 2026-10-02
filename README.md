@@ -74,12 +74,12 @@ The exercises follow a deliberate progression — from exploring an existing age
 
 | # | Exercise | What you learn |
 |---|---|---|
-| 0 | [Getting Started](exercises/ex0/) | Access the session landscape, open Joule Studio, verify connectivity |
-| 1 | [Explore the Onboarding Task Management Agent](exercises/ex1/) | Understand the agent's capabilities and limits by trying sample prompts *without* any extensions |
-| 2 | [Build an Instructions Extension](exercises/ex2/) | Create an extension that changes the agent's response language — learn the extension authoring lifecycle end-to-end with minimal complexity |
-| 3 | [Deploy and Invoke the Instructions Extension](exercises/ex3/) | Deploy the extension to the agent, invoke it, and verify the changed behaviour |
-| 4 | [Build the Ariba Agent Extension](exercises/ex4/) | Create an extension that connects to SAP Ariba to initiate equipment procurement for a new hire — artifacts (requisition) are created in the system |
-| 5 | [Deploy and Invoke the Ariba Extension](exercises/ex5/) | Deploy the Ariba extension, run the onboarding equipment procurement flow end-to-end, and verify the requisition in Ariba |
+| 0 | [Getting Started](exercises/ex0/README.md) | Access the session landscape, open Joule Studio, verify connectivity |
+| 1 | [Explore the Onboarding Task Management Agent](exercises/ex1/README.md) | Understand the agent's capabilities and limits by trying sample prompts *without* any extensions |
+| 2 | [Build an Instructions Extension](exercises/ex2/README.md) | Create an extension that changes the agent's response language — learn the extension authoring lifecycle end-to-end with minimal complexity |
+| 3 | [Deploy and Invoke the Instructions Extension](exercises/ex3/README.md) | Deploy the extension to the agent, invoke it, and verify the changed behaviour |
+| 4 | [Build the Ariba Agent Extension](exercises/ex4/README.md) | Create an extension that connects to SAP Ariba to initiate equipment procurement for a new hire — artifacts (requisition) are created in the system |
+| 5 | [Deploy and Invoke the Ariba Extension](exercises/ex5/README.md) | Deploy the Ariba extension, run the onboarding equipment procurement flow end-to-end, and verify the requisition in Ariba |
 
 **IMPORTANT**
 
