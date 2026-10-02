@@ -1,48 +1,89 @@
-# Containing Files
-
-1. The LICENSE file:
-In most cases, the license for SAP sample projects is `Apache 2.0`.
-
-2. The REUSE.toml file: 
-The [Reuse Tool](https://reuse.software/) must be used for your samples project. You can find the REUSE.toml in the project initial. Please replace the parts inside the single angle quotation marks < > by the specific information for your repository.
-
-3. The README.md file (this file):
-Please edit this file as it is the primary description file for your project. You can find some placeholder titles for sections below.
-
-# Session ID - Session Title
+# AD264 - Build and Extend AI Agents with SAP Joule Studio
 
 ## Description
 
-This repository contains the material for the SAP TechEd 2026 session called Session ID - Session Title.  
+This repository contains the material for the SAP TechEd 2026 session **AD264 - Build and Extend AI Agents with SAP Joule Studio**.
 
 ## Overview
 
-This session introduces attendees to...
+This session shows how to build and extend AI agents using SAP Joule Studio — specifically the **Agent Extension** feature. You will work with a pre-built **Onboarding Task Management Agent** and extend it with a custom Ariba integration to automate equipment procurement for new hires.
+
+### Use Case: Onboarding Task Management
+
+HR and operations teams managing new-hire onboarding face a recurring problem: equipment is not ordered in time, and Day 1 readiness slips. Manually tracking pending tasks across systems takes time and is error-prone.
+
+The **Onboarding Task Management Agent** (Onboarding Assistant) solves this by giving users a conversational interface to monitor onboarding tasks and act on blockers — directly from within Joule.
+
+### End-to-End Flow
+
+```
+User asks: "What onboarding tasks are at risk for next week's new hires?"
+```
+
+1. The agent identifies new hires with pending tasks that could impact Day 1 readiness.
+2. For a flagged hire (e.g., *Priya*), the agent determines required equipment — laptop, monitor, headset — from onboarding context.
+3. The agent invokes the **Ariba Agent Extension** with the new hire's details and equipment requirements.
+4. The Ariba extension identifies or creates the required procurement request.
+5. If approval is required, the agent presents a confirmation to the user:
+
+   > *"A laptop, monitor, and headset are required for Priya. Estimated cost: $X. Create the procurement request?"*
+
+6. After user approval, the Ariba extension submits the order.
+7. Ariba returns the requisition/order status (e.g., *Requisition #12345*).
+8. The agent reports back and updates the onboarding task status accordingly.
+
+**Sample conversation:**
+
+| | |
+|---|---|
+| **User** | "Are there any onboarding tasks that could delay Priya's Day 1?" |
+| **Agent** | "Yes. Her equipment provisioning task is still pending. I can use the Ariba extension to initiate the equipment order." |
+| **User** | "Go ahead." |
+| **Agent** | "The equipment request has been created in Ariba. Requisition #12345 is now pending fulfillment." |
+
+### Agent Extensions
+
+This session focuses on building two types of **Agent Extensions** in Joule Studio — a capability that lets you modify agent behaviour or connect agents to external LOB systems.
+
+| Extension | Type | Purpose |
+|---|---|---|
+| **Language Extension** | Instructions Extension | Changes the agent's response language — a simple, self-contained introduction to the extension development and deployment lifecycle |
+| **Ariba Extension** | LOB Integration Extension | Creates and tracks procurement requests for new-hire equipment in SAP Ariba |
+
+> The session is deliberately sequenced: you build the instructions extension first to learn *how* extensions work, then apply the same pattern to the more complex Ariba integration.
+
+### Systems Used
+
+| System | Access Type |
+|---|---|
+| SAP S/4HANA Cloud Public Edition | Read & Write (onboarding task data) |
+| SAP Ariba | Read & Write (procurement requests) |
 
 ## Requirements
 
-The requirements to follow the exercises in this repository are...
+To follow the exercises in this repository you need:
+
+- Access to an SAP BTP subaccount with Joule Studio enabled
+- Access to SAP S/4HANA Cloud Public Edition (provided in the session landscape)
+- Access to SAP Ariba (provided in the session landscape)
+- Basic familiarity with SAP BTP and REST APIs
 
 ## Exercises
 
-Provide the exercise content here directly in README.md using [markdown](https://guides.github.com/features/mastering-markdown/) and linking to the specific exercise pages, below is an example.
+The exercises follow a deliberate progression — from exploring an existing agent, to building a simple extension, to wiring up a real LOB system.
 
-- [Getting Started](exercises/ex0/)
-- [Exercise 1 - First Exercise Description](exercises/ex1/)
-    - [Exercise 1.1 - Exercise 1 Sub Exercise 1 Description](exercises/ex1#exercise-11-sub-exercise-1-description)
-    - [Exercise 1.2 - Exercise 1 Sub Exercise 2 Description](exercises/ex1#exercise-12-sub-exercise-2-description)
-- [Exercise 2 - Second Exercise Description](exercises/ex2/)
-    - [Exercise 2.1 - Exercise 2 Sub Exercise 1 Description](exercises/ex2#exercise-21-sub-exercise-1-description)
-    - [Exercise 2.2 - Exercise 2 Sub Exercise 2 Description](exercises/ex2#exercise-22-sub-exercise-2-description)
-
-  
-**OR** Link to the Tutorial Navigator for example...
-
-Start the exercises [here](https://developers.sap.com/tutorials/abap-environment-trial-onboarding.html).
+| # | Exercise | What you learn |
+|---|---|---|
+| 0 | [Getting Started](exercises/ex0/) | Access the session landscape, open Joule Studio, verify connectivity |
+| 1 | [Explore the Onboarding Task Management Agent](exercises/ex1/) | Understand the agent's capabilities and limits by trying sample prompts *without* any extensions |
+| 2 | [Build an Instructions Extension](exercises/ex2/) | Create an extension that changes the agent's response language — learn the extension authoring lifecycle end-to-end with minimal complexity |
+| 3 | [Deploy and Invoke the Instructions Extension](exercises/ex3/) | Deploy the extension to the agent, invoke it, and verify the changed behaviour |
+| 4 | [Build the Ariba Agent Extension](exercises/ex4/) | Create an extension that connects to SAP Ariba to initiate equipment procurement for a new hire — artifacts (requisition) are created in the system |
+| 5 | [Deploy and Invoke the Ariba Extension](exercises/ex5/) | Deploy the Ariba extension, run the onboarding equipment procurement flow end-to-end, and verify the requisition in Ariba |
 
 **IMPORTANT**
 
-Your repo must contain the .reuse and LICENSES folder and the License section below. DO NOT REMOVE the section or folders/files. Also, remove all unused template assets(images, folders, etc) from the exercises folder. 
+Your repo must contain the .reuse and LICENSES folder and the License section below. DO NOT REMOVE the section or folders/files. Also, remove all unused template assets(images, folders, etc) from the exercises folder.
 
 ## Contributing
 Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) to understand the contribution guidelines.
