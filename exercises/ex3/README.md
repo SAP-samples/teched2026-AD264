@@ -42,13 +42,14 @@ After completing these steps you will have started a new solution targeting the 
 
 In Joule Studio, click **+ New** and select **Extension**.
 
-Fill in the following:
+A dialog opens. For the **Base agent** field, click the **Select Agent** icon to open the agent catalog. Search for **Onboarding Task Management Agent** and select it. You are returned to the dialog with the agent pre-populated.
+
+Fill in the remaining fields:
 
 | Field | Value |
 |---|---|
 | **Solution** | New Solution |
 | **Extension name** | `ad264-ariba-procurement` |
-| **Base agent** | Onboarding Task Management Agent |
 | **Intent Statement** | Leave this for the next step |
 | **Quick Create** | ☑ Enable this |
 
@@ -58,7 +59,7 @@ Don't click **Create** yet.
 
 ## Exercise 3.2 — Enter Your Intent Statement
 
-After completing these steps you will have submitted a multi-step business scenario as an intent statement and generated an MCP tool extension from it.
+After completing these steps you will have submitted a multi-step business scenario as an intent statement and triggered generation of an MCP tool extension.
 
 This intent is more complex than the previous two — it describes a full workflow with a procurement request, an approval step, and a status update. Even so, the approach is exactly the same: describe what you need in business language, and Joule Studio works out the structure.
 
@@ -80,29 +81,28 @@ The extension should:
 
 Make sure **Quick Create** is checked, then click **Create**.
 
+Once you click Create, Joule Studio begins processing your intent. This takes approximately **5 minutes** — it analyzes the full workflow, derives requirements for the procurement flow and approval gate, builds a technical specification, and generates all the extension files including the MCP tool schema and connector logic.
+
 ---
 
 ## Exercise 3.3 — Review the Generated Artifacts and Run the Scenario
 
 After completing these steps you will have reviewed what Joule Studio produced for an MCP tool extension and understood how the agent uses it at runtime.
 
-### Review the generated extension
+### Review the generated project
 
-Look at what Joule Studio produced — notice how much more it generated compared to Exercises 1 and 2:
+Once generation completes, open the **Files** tab and explore the full project:
 
-- An **MCP Tool component** — the callable tool, with a defined input schema (`new_hire_name`, `equipment_list`, `estimated_cost`) and response mapping
-- An **Approval gate** — the message template the agent surfaces to the user before executing any order
-- A **Status handler** — the logic that maps Ariba's requisition response back to the onboarding task status
-
-Open the **Files** tab:
-
-| File | What it contains |
+| File | What it is |
 |---|---|
+| `intent.md` | The intent summary — Joule's interpretation of the procurement workflow |
+| `prd.md` | The Product Requirements Document — functional requirements for the Ariba integration, approval gate, and status tracking |
+| `spec.md` | The technical specification — MCP tool schema, Ariba API contract, approval flow logic |
 | `extension.yaml` | Extension descriptor — type `mcp-tool`, MCP server registration, tool manifest |
 | `tool-schema.json` | The tool definition the agent calls — input parameters and output structure |
 | `ariba-connector.js` | The MCP server logic — authenticates to Ariba, constructs the request, returns the result |
 
-The agent doesn't call Ariba directly. It calls the MCP tool — a structured interface that handles authentication, request construction, and response translation. The agent only sees clean input and output.
+Notice how much richer this project is compared to Exercises 1 and 2. The PRD and spec capture the full procurement workflow — including the approval gate and the status mapping back to the onboarding task — before a single line of extension code is written. This is the value of intent-based development: structured, documented, traceable from business requirement all the way through to deployable code.
 
 Click **Save**.
 
@@ -139,7 +139,7 @@ That's the full loop — detection, proposal, approval, execution, confirmation 
 
 You've now built all three extension types: an Instructions Extension that shapes what the agent says, a Hooks Extension that intercepts every interaction at the execution level, and an MCP Tool Extension that gives the agent the ability to act in an external system.
 
-Every one of them started with a plain language description. Joule Studio handled the translation.
+Every one of them started with a plain language description. Every one produced a complete project — intent, requirements, specification, and working extension files. Joule Studio handled the translation.
 
 That's the pattern — and it works for any pre-delivered SAP agent in your landscape.
 
@@ -149,4 +149,3 @@ That's the pattern — and it works for any pre-delivered SAP agent in your land
 
 [Back: Exercise 2 — Add Traceability with Pre and Post Hooks](../ex2/)
 [Back to Overview](../../README.md)
-
