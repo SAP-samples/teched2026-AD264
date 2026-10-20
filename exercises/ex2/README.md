@@ -46,13 +46,14 @@ After completing these steps you will have started a new extension solution targ
 
 In Joule Studio, click **+ New** and select **Extension**.
 
-Fill in the following:
+A dialog opens. For the **Base agent** field, click the **Select Agent** icon to open the agent catalog. Search for **Onboarding Task Management Agent** and select it. You are returned to the dialog with the agent pre-populated.
+
+Fill in the remaining fields:
 
 | Field | Value |
 |---|---|
 | **Solution** | New Solution |
 | **Extension name** | `ad264-onboarding-hooks` |
-| **Base agent** | Onboarding Task Management Agent |
 | **Intent Statement** | Leave this for the next step |
 | **Quick Create** | ☑ Enable this |
 
@@ -76,26 +77,26 @@ Post-hook: After the agent generates each response, append the following complia
 
 Make sure **Quick Create** is checked, then click **Create**.
 
+Once you click Create, Joule Studio begins processing your intent. This takes approximately **5 minutes** — it analyzes your intent, derives requirements, builds a technical specification, and generates all the extension files. You will see a progress indicator while it runs.
+
 ---
 
 ## Exercise 2.3 — Review the Generated Artifacts
 
 After completing these steps you will have reviewed the hook components Joule Studio generated and understood how they differ from an Instructions Extension.
 
-Before saving, compare what you see now to Exercise 1:
+Once generation completes, open the **Files** tab and look at what was created:
 
-- In Exercise 1, Joule Studio generated one configuration block — the instruction text.
-- Here, it generated two **executable components** — a pre-hook and a post-hook — each with its own execution point in the request lifecycle.
-
-Open the **Files** tab and look at what was created:
-
-| File | What it contains |
+| File | What it is |
 |---|---|
+| `intent.md` | The intent summary — Joule's structured interpretation of your hooks requirement |
+| `prd.md` | The Product Requirements Document — functional requirements for the pre and post hooks |
+| `spec.md` | The technical specification — execution points, context injection logic, and hook wiring |
 | `extension.yaml` | Extension descriptor — type `hooks` and both hook registrations |
 | `pre-hook.js` | Pre-hook logic — stamps timestamp and request ID onto the context |
 | `post-hook.js` | Post-hook logic — appends the disclaimer to the agent's response |
 
-The key difference from Exercise 1: these files contain logic, not just configuration. When deployed, Joule executes them — one before the agent runs, one after.
+Compare this to Exercise 1: in Exercise 1, Joule produced one configuration block — the instruction text. Here it produced two **executable files** — a pre-hook and a post-hook — each with its own execution point in the request lifecycle. The intent, PRD, and spec files document exactly why each hook exists and what it does.
 
 Click **Save**.
 
@@ -113,4 +114,3 @@ In Exercise 3, you'll go further: giving the agent a tool it can actively call t
 
 [Back: Exercise 1 — Add an AI Compliance Disclaimer](../ex1/)
 [Next: Exercise 3 — Connect to Ariba for Equipment Procurement](../ex3/)
-
