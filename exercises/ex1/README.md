@@ -1,96 +1,117 @@
-# Exercise 1 — Explore the Onboarding Task Management Agent
+# Exercise 1 — Add an AI Compliance Disclaimer
 
 ## Overview
 
-| Field | Details |
+| | |
 |---|---|
-| **Agent** | Onboarding Task Management Agent (Onboarding Assistant) |
-| **Extension** | None — base agent only |
-| **Goal** | Understand what the agent can and cannot do out of the box |
-| **Duration** | ~10 minutes |
-
-> This exercise establishes the **BEFORE state**. You will compare these results against the extended agent in later exercises.
+| **Base agent** | Onboarding Task Management Agent |
+| **Extension type** | Instructions Extension |
+| **Duration** | ~20 minutes |
 
 ---
 
-## The Agent
+## The business problem
 
-The **Onboarding Task Management Agent** helps HR and operations teams track new-hire onboarding tasks. It has access to onboarding task data in SAP S/4HANA Cloud and can:
+When someone asks the Onboarding Task Management Agent a question, they get an answer. What they don't get is any indication that the answer came from an AI system. For most enterprise use cases — and increasingly, for regulatory ones — that's a problem. Teams need to know when they're reading AI-generated output, and automated responses need to carry that label by default.
 
-- List open onboarding tasks for upcoming new hires
-- Identify tasks that are overdue or at risk
-- Report on a specific new hire's onboarding status
+Today, nothing in the standard agent handles this. There's no disclaimer, no label, no indication of AI origin. And because it's a pre-delivered agent, you can't just edit its source code to add one.
 
-**What it cannot do out of the box:**
-- Respond in a language other than English
-- Initiate actions in external systems (e.g., place a procurement order in Ariba)
+An Instructions Extension solves this cleanly. It injects a plain-language rule into the agent's prompt at runtime — the agent reads it like any other instruction and follows it on every response. No code, no deployment complexity, no changes to the base agent.
 
----
+## What you will build
 
-## Try These Prompts
+A single Instructions Extension called `ad264-ai-disclaimer` that appends the following to every agent response:
 
-Work through the prompts below in order. Note the agent's response each time — you will refer back to these in later exercises.
-
-### Prompt 1 — General status
-
-```
-What onboarding tasks are at risk for next week's new hires?
-```
-
-Expected: The agent lists new hires with pending or overdue tasks. Look for **Priya** in the list — her equipment provisioning task should be flagged.
+> *"DISCLAIMER: This is an AI-generated response. For official HR guidance, please consult your HR Business Partner."*
 
 ---
 
-### Prompt 2 — Drill into a specific new hire
+## Exercise 1.1 — Open Joule Studio and Create a New Extension
 
-```
-Are there any onboarding tasks that could delay Priya's Day 1?
-```
+After completing these steps you will have opened Joule Studio and initiated a new extension project targeting the Onboarding Task Management Agent.
 
-Expected: The agent identifies the equipment provisioning task as pending. It may suggest that action is needed but cannot take that action itself.
+Log in to SAP Joule Works using the credentials provided at your desk. In the left navigation panel, select **Develop** to open Joule Studio.
 
----
+On the Joule Studio home screen, select the **Agent Extension** tile.
 
-### Prompt 3 — Ask about equipment
+In the dialog that appears, fill in the following:
 
-```
-What equipment does Priya need for Day 1?
-```
+| Field | Value |
+|---|---|
+| **Solution** | New Solution |
+| **Extension name** | `ad264-ai-disclaimer` |
+| **Base agent** | Onboarding Task Management Agent |
+| **Intent Statement** | Leave this for the next step |
+| **Quick Create** | ☑ Enable this |
 
-Expected: The agent returns a list of required items (laptop, monitor, headset) based on the onboarding context. It provides information but takes no action.
+> **Why Quick Create?** With Quick Create on, Joule Studio generates your extension immediately from the intent you provide — no clarifying questions, no structured review flow. For a focused instruction like a disclaimer, it produces accurate output in one step. In Exercise 3, you'll see the difference when the intent is more complex.
 
----
-
-### Prompt 4 — Ask for an action the agent cannot perform
-
-```
-Please create a procurement request in Ariba for Priya's equipment.
-```
-
-Expected: The agent declines or says it cannot perform that action — it has no connection to Ariba. **This is intentional.** You will fix this in Exercise 4.
+Don't click **Create** yet — add the intent statement first.
 
 ---
 
-### Prompt 5 — Language test
+## Exercise 1.2 — Enter Your Intent Statement
+
+After completing these steps you will have submitted your business requirement as a natural language intent statement and generated your first extension.
+
+The intent statement is how you tell Joule Studio what your extension should do. You don't need to describe the technical implementation — describe the business behaviour, and Joule Studio works out what to build.
+
+In the **Intent Statement** field, copy and paste the following:
 
 ```
-Beantworte meine nächste Frage auf Deutsch.
-What is Priya's onboarding status?
+Always include the following disclaimer at the end of every response: "DISCLAIMER: This is an AI-generated response. For official HR guidance, please consult your HR Business Partner."
 ```
 
-Expected: The agent will likely respond in English regardless of the instruction. **This is intentional.** You will fix this in Exercise 2.
+Make sure **Quick Create** is checked, then click **Create**.
+
+Joule Studio analyzes your intent and generates the extension. This takes a few seconds.
 
 ---
 
-## What to Note
+## Exercise 1.3 — Review the Generated Artifacts and Explore Joule Studio
 
-Before moving on, make a mental note of:
+After completing these steps you will have reviewed everything Joule Studio produced and got familiar with the key areas of the interface you'll use throughout all three exercises.
 
-1. The agent's default response language
-2. The fact that it cannot initiate Ariba procurement requests
-3. Priya's pending equipment provisioning task — you will use this in Exercises 4 and 5
+### Review the generated extension
+
+Before saving, look at what Joule Studio produced:
+
+- An **Instructions component** containing the disclaimer text, formatted as a system-level instruction the agent will follow at runtime
+- The extension linked to the **Onboarding Task Management Agent** as its base
+
+Click **Save**. The status changes to **Saved**.
+
+> The extension now exists on the tenant but isn't active yet — it hasn't been deployed. Your facilitator will handle deployment live so you can see the result in action. Stop here and don't deploy.
+
+### Explore the generated files
+
+Open the **Files** tab in the solution view.
+
+| File | What it is |
+|---|---|
+| `extension.yaml` | The extension descriptor — name, type, and which agent it targets |
+| Instructions content | The disclaimer text, stored as a system instruction |
+
+Notice there's no code here — just configuration. That's what makes an Instructions Extension lightweight: one text block is enough to change how the agent behaves at runtime.
+
+### Explore the interface — Monitoring, Deploy, and Versions
+
+Take a few minutes to explore the three areas you'll see referenced across all exercises:
+
+**Monitoring tab** — Select this from the top navigation. This is where you see how often the agent has been invoked, which extensions are active per session, and any runtime errors. It gives you live visibility into agent behaviour without needing backend access.
+
+**Deploy tab** — This is where an extension moves from Saved to active on the tenant. Deployment is an admin-level action — your facilitator will handle it during the live demo. Take a look at the flow, but don't click Deploy.
+
+**Versions tab** — Open the extension detail view and select Versions. Every save creates a new version. You can compare versions, roll back to any previous state, and see who changed what when working in a team. Extensions can also be packaged here for transport across tenants (DEV → TEST → PROD).
 
 ---
 
-[Back: Exercise 0 — Getting Started](../ex0/)
-[Next: Exercise 2 — Build an Instructions Extension](../ex2/)
+## Summary
+
+You've built your first agent extension. Starting from a one-sentence business requirement, Joule Studio produced a complete, deployable artifact — and you didn't write a single line of code.
+
+More importantly, you've seen the core pattern: describe the behaviour you need, let Joule Studio handle the translation. The same approach applies to every extension type, and you'll use it twice more in the next two exercises.
+
+---
+
+[Next: Exercise 2 — Add Traceability with Pre and Post Hooks](../ex2/)
