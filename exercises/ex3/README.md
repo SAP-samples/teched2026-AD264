@@ -40,7 +40,7 @@ An MCP Tool Extension called `ad264-ariba-procurement` that connects the Onboard
 
 After completing these steps you will have started a new solution targeting the Onboarding Task Management Agent for an MCP tool extension.
 
-In Joule Studio, select the **Agent Extension** tile.
+In Joule Studio, click **+ New** and select **Extension**.
 
 Fill in the following:
 
@@ -149,3 +149,4 @@ That's the pattern — and it works for any pre-delivered SAP agent in your land
 
 [Back: Exercise 2 — Add Traceability with Pre and Post Hooks](../ex2/)
 [Back to Overview](../../README.md)
+
