@@ -1,126 +1,115 @@
-# Exercise 2 — Build an Instructions Extension
+# Exercise 2 — Add Traceability with Pre and Post Hooks
 
 ## Overview
 
-| Field | Details |
+| | |
 |---|---|
-| **Base Agent** | Onboarding Task Management Agent |
-| **Extension Type** | Instruction Extension |
-| **Business Context** | HR / Onboarding |
-| **Complexity** | Simple |
-| **Joule Studio Scope** | Agent Extension creation, Instruction Extension configuration |
-
-> **Why start here?** An Instruction Extension requires no code, no APIs, and no external systems. It teaches you the full extension authoring lifecycle — intent, design, review — in the simplest possible way. You will apply the same lifecycle to the Ariba extension in Exercise 4.
+| **Base agent** | Onboarding Task Management Agent |
+| **Extension type** | Hooks Extension (Pre-hook + Post-hook) |
+| **Duration** | ~20 minutes |
 
 ---
 
-## The Problem
+## Where we left off
 
-The Onboarding Task Management Agent responds in English only. Your HR team onboarding new hires in Germany wants responses in **German** to avoid switching context.
+In Exercise 1, you added a compliance disclaimer to every agent response using an Instructions Extension. The agent now labels its output automatically — and you did it with a single sentence of plain language.
 
-**The gap:** The base agent has no language preference configured. No matter what language you write in, it responds in English.
+But an Instructions Extension only touches the agent's *output*. It doesn't run logic, it doesn't intercept requests, and it doesn't know anything about when a conversation started or which session it belongs to. For traceability — the kind that shows up in audit logs and support tickets — you need something that runs at the edges of every interaction.
 
-**Instruction Extension closes this gap** — a single instruction injected into the agent prompt is enough to change the response language without touching any code.
-
----
-
-## Extension Prompt
-
-Paste this into the Joule Studio intent box:
-
-```
-I want the Onboarding Task Management Agent to always respond in German,
-regardless of the language the user writes in.
-All task names, status labels, and dates should also be presented in German.
-Do not change any underlying data or task logic.
-```
-
-**Additional context to inject:**
-
-```
-Language Convention:
-Always respond in German (Deutsch), regardless of the input language.
-Translate all status labels, task names, and response text to German.
-Keep all proper nouns (names, system names) unchanged.
-Do not alter any onboarding task data, dates, or computed statuses.
-```
+That's what hooks are for.
 
 ---
 
-## Steps
+## The business problem
 
-| Step | Phase | What you do |
-|---|---|---|
-| 1 | Open Joule Studio | Navigate to Develop → Agent Extension |
-| 2 | Enter extension details | Name the extension and paste the intent prompt |
-| 3 | Review the design screen | Confirm the Instruction Extension configuration |
-| 4 | Save | Save the extension (do not deploy yet — that is Exercise 3) |
+The Onboarding Task Management Agent handles sensitive HR interactions. When something goes wrong — or when someone needs to audit what happened in a session — there's currently no trail. You can't tell when a request was made, which session it came from, or whether the response included the right disclosures.
+
+Pre and post hooks let you intercept every interaction at the execution level:
+
+- **Pre-hook** — fires before the agent sees the user's message; the right place to stamp traceability context onto the request before anything else happens
+- **Post-hook** — fires after the agent generates its response; the right place to add a per-response compliance label or modify what gets returned
+
+Together, they give you a complete, auditable record of every interaction — without touching the base agent.
+
+## What you will build
+
+A Hooks Extension called `ad264-onboarding-hooks` with:
+
+- A **pre-hook** that captures a timestamp and unique request ID for every interaction
+- A **post-hook** that appends the compliance disclaimer after every agent response
 
 ---
 
-### Step 1 — Open Joule Studio
+## Exercise 2.1 — Create a New Hooks Extension
 
-In the left navigation of Joule Work, select **Develop** to open Joule Studio.
+After completing these steps you will have started a new extension solution targeting the Onboarding Task Management Agent.
 
-On the Joule Studio home screen, select the **Agent Extension** tile.
+In Joule Studio, select the **Agent Extension** tile to open a new dialog.
 
-![Joule Work — select Develop](img/01_joule_studio_home.png)
-
----
-
-### Step 2 — Create the extension
-
-A dialog appears. Fill in:
+Fill in the following:
 
 | Field | Value |
 |---|---|
-| **Extension name** | `onboarding-language-de` (or any unique name) |
+| **Solution** | New Solution |
+| **Extension name** | `ad264-onboarding-hooks` |
 | **Base agent** | Onboarding Task Management Agent |
-| **Intent** | Paste the **Extension Prompt** from above |
+| **Intent Statement** | Leave this for the next step |
+| **Quick Create** | ☑ Enable this |
 
-Make sure **Quick Create is unselected** — this allows Joule Studio (IBD) to guide you through clarifying questions and generate the full extension design.
-
-![Create Extension dialog — filled](img/02_create_extension_dialog.png)
-
-Click **Create**.
+Don't click **Create** yet.
 
 ---
 
-### Step 3 — Review the design screen
+## Exercise 2.2 — Enter Your Intent Statement
 
-IBD will ask clarifying questions to confirm your intent. Answer:
-- Extension type: **Instruction Extension**
-- Base agent: **Onboarding Task Management Agent**
-- No tools or hooks needed
+After completing these steps you will have generated a hooks extension from a natural language intent.
 
-The design screen appears with:
-- **Base Agent** field showing the Onboarding Task Management Agent
-- **Additional context** section (empty by default)
-- **Pre Hooks** and **Post Hooks** sections — leave these empty
+In the **Intent Statement** field, copy and paste the following:
 
-Click **Edit** on the "Additional context" section. Paste the **Language Convention** text from above. Click the checkmark to save.
+```
+Add pre and post hooks to the Onboarding Task Management Agent.
 
-![Design screen — Additional Context filled](img/03_design_screen.png)
+Pre-hook: Before the agent processes each user message, capture the current timestamp and a unique request ID, and inject them into the request context for end-to-end traceability.
 
----
+Post-hook: After the agent generates each response, append the following compliance disclaimer to the end of the message: "DISCLAIMER: This is an AI-generated response. For official HR guidance, please consult your HR Business Partner."
+```
 
-### Step 4 — Save
-
-Your extension is configured. Do not deploy yet — you will deploy and test it in Exercise 3.
-
-> **Checkpoint:** The design screen should show the Language Convention text in the Additional context section, and no tools or hooks.
+Make sure **Quick Create** is checked, then click **Create**.
 
 ---
 
-## What This Extension Does
+## Exercise 2.3 — Review the Generated Artifacts
 
-| Component | What it does |
+After completing these steps you will have reviewed the hook components Joule Studio generated and understood how they differ from an Instructions Extension.
+
+Before saving, compare what you see now to Exercise 1:
+
+- In Exercise 1, Joule Studio generated one configuration block — the instruction text.
+- Here, it generated two **executable components** — a pre-hook and a post-hook — each with its own execution point in the request lifecycle.
+
+Open the **Files** tab and look at what was created:
+
+| File | What it contains |
 |---|---|
-| **Instruction Extension** | Injects the Language Convention into the agent prompt — the agent responds in German at runtime |
+| `extension.yaml` | Extension descriptor — type `hooks` and both hook registrations |
+| `pre-hook.js` | Pre-hook logic — stamps timestamp and request ID onto the context |
+| `post-hook.js` | Post-hook logic — appends the disclaimer to the agent's response |
 
-No code changes. No API connections. No hooks. The base agent's task data, logic, and connectivity are untouched.
+The key difference from Exercise 1: these files contain logic, not just configuration. When deployed, Joule executes them — one before the agent runs, one after.
+
+Click **Save**.
+
+> **Please stop here and don't deploy.** Your facilitator will walk through deployment during the live demo.
 
 ---
 
-[Back: Exercise 1 — Explore the Agent](../ex1/)
-[Next: Exercise 3 — Deploy and Invoke the Instructions Extension](../ex3/)
+## Summary
+
+You've now built two different types of extensions for the same agent. Instructions change what the agent *says*. Hooks change what happens *around* what the agent says — before and after, at the execution level.
+
+In Exercise 3, you'll go further: giving the agent a tool it can actively call to take action in an external system.
+
+---
+
+[Back: Exercise 1 — Add an AI Compliance Disclaimer](../ex1/)
+[Next: Exercise 3 — Connect to Ariba for Equipment Procurement](../ex3/)
