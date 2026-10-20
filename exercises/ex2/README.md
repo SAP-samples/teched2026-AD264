@@ -44,7 +44,7 @@ A Hooks Extension called `ad264-onboarding-hooks` with:
 
 After completing these steps you will have started a new extension solution targeting the Onboarding Task Management Agent.
 
-In Joule Studio, select the **Agent Extension** tile to open a new dialog.
+In Joule Studio, click **+ New** and select **Extension**.
 
 Fill in the following:
 
@@ -113,3 +113,4 @@ In Exercise 3, you'll go further: giving the agent a tool it can actively call t
 
 [Back: Exercise 1 — Add an AI Compliance Disclaimer](../ex1/)
 [Next: Exercise 3 — Connect to Ariba for Equipment Procurement](../ex3/)
+
