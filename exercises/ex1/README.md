@@ -32,7 +32,7 @@ After completing these steps you will have opened Joule Studio and initiated a n
 
 Log in to SAP Joule Works using the credentials provided at your desk. In the left navigation panel, select **Develop** to open Joule Studio.
 
-On the Joule Studio home screen, select the **Agent Extension** tile.
+On the Joule Studio home screen, click **+ New** and select **Extension**.
 
 In the dialog that appears, fill in the following:
 
@@ -115,3 +115,4 @@ More importantly, you've seen the core pattern: describe the behaviour you need,
 ---
 
 [Next: Exercise 2 — Add Traceability with Pre and Post Hooks](../ex2/)
+
