@@ -18,13 +18,6 @@ Onboarding task lists are long. A typical new hire onboarding plan contains 20�
 
 By building this as an **Instruction Extension**, the prioritization is enforced at the agent level — not through UI customization, filtering, or post-processing. Every response the Onboarding Task Manager Agent produces for a manager will reflect the rule, with no exceptions and no manual sorting required.
 
-### Where your extension runs
-
-![Joule Studio Runtime: Agent Flow](images/00_runtime_agent_flow.png)
-
-You build in **Joule Studio**. Once deployed, your extension runs inside the **Joule Studio Runtime** — the same runtime that powers all pre-delivered SAP agents. An Instruction Extension sits directly inside the Agent box: it modifies how the agent reasons and responds, with no external calls and no additional infrastructure required. This is what makes it the fastest extension type to build and deploy.
-
----
 
 > [!NOTE]
 > **Every IBD run looks different — that is expected**
