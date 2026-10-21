@@ -1,151 +1,299 @@
-# Exercise 3 — Connect the Agent to Ariba for Equipment Procurement
+# Exercise 3 ★ Bonus — Extend the Onboarding Task Manager Agent: Pre-Hook & Post-Hook
 
-## Overview
+This is a bonus exercise. It is not required to complete the session — but if you have finished Exercises 1 and 2 and want to go further, this is where extensions get more powerful.
 
-| | |
-|---|---|
-| **Base agent** | Onboarding Task Management Agent |
-| **Extension type** | MCP Tool Extension |
-| **Duration** | ~25 minutes |
+In Exercises 1 and 2 you extended the agent's behaviour with instructions and tools. Both of those operate *during* the agent's response. Hooks are different — they let you intercept what happens *before* the agent starts and *after* it finishes. This exercise builds both.
 
 ---
 
-## Where we left off
+### What you will build
 
-In Exercises 1 and 2, you extended the Onboarding Task Management Agent with instructions and hooks. Both of those extension types work *around* the agent's existing capabilities — they add labels, inject context, and run logic at the edges.
+Two hooks on the Onboarding Task Manager Agent:
 
-In this exercise, you'll go further. You'll give the agent an entirely new capability: the ability to reach into Ariba, check whether a new hire's equipment has been ordered, and create a procurement request if it hasn't — all from within the conversation.
+**Pre-Hook — Onboarding Readiness Gate**
+> Before the agent processes any request, check whether the new hire's onboarding record is complete and active in SAP SuccessFactors. If the record is missing or in a draft state, block the request and return a clear message rather than letting the agent attempt to operate on incomplete data.
 
----
-
-## The business problem
-
-When a new hire's equipment isn't ordered in time, they arrive on Day 1 without what they need. The Onboarding Task Management Agent can identify when a provisioning task is at risk — but today it stops there. It can tell you there's a problem; it can't do anything about it.
-
-That gap exists because the agent has no connection to Ariba. It doesn't know what procurement requests exist, it can't create new ones, and it has no way to confirm whether equipment will arrive on time.
-
-An MCP Tool Extension closes that gap. It registers a tool the agent can call at runtime — a direct line into Ariba's APIs. When the agent determines that equipment needs to be ordered, it invokes the tool, presents the proposed request for approval, and executes it after the user confirms. The entire flow — detection, proposal, approval, execution, confirmation — happens inside one conversation.
-
-## What you will build
-
-An MCP Tool Extension called `ad264-ariba-procurement` that connects the Onboarding Task Management Agent to Ariba, with:
-
-- An **MCP tool** that queries Ariba for existing procurement requests and creates new ones
-- An **approval gate** that surfaces the proposed order to the user before anything is submitted
-- A **status handler** that returns the requisition number back to the agent so it can update the onboarding task status
+**Post-Hook — Teams Notification on Task Completion**
+> After the agent marks an onboarding task as complete, automatically send a notification to the hiring manager's Teams channel with the task name, new hire name, and completion timestamp — so the manager is informed without needing to check the system.
 
 ---
 
-## Exercise 3.1 — Create a New MCP Tool Extension
+### Why hooks exist
 
-After completing these steps you will have started a new solution targeting the Onboarding Task Management Agent for an MCP tool extension.
+| Extension type | When it runs | What it can do |
+|---|---|---|
+| Instruction | During the agent response | Change how the agent reasons and responds |
+| MCP Server | During the agent response | Give the agent tools to call external systems |
+| **Pre-Hook** | **Before the agent starts** | **Validate input, enrich context, block execution** |
+| **Post-Hook** | **After the agent responds** | **Trigger follow-on actions, notify, log, transform output** |
 
-In Joule Studio, click **+ New** and select **Extension**.
+Hooks run as n8n workflows. They are not part of the agent's reasoning loop — they are external processes that wrap it. The agent never sees the hook code; it only sees the enriched input (pre-hook) or runs before the follow-on action fires (post-hook).
 
-A dialog opens. For the **Base agent** field, click the **Select Agent** icon to open the agent catalog. Search for **Onboarding Task Management Agent** and select it. You are returned to the dialog with the agent pre-populated.
+### The user story
 
-Fill in the remaining fields:
-
-| Field | Value |
-|---|---|
-| **Solution** | New Solution |
-| **Extension name** | `ad264-ariba-procurement` |
-| **Intent Statement** | Leave this for the next step |
-| **Quick Create** | ☑ Enable this |
-
-Don't click **Create** yet.
+> As an HR administrator, I want the Onboarding Task Manager Agent to verify that a new hire's onboarding record exists and is active before processing any request — and to automatically notify the hiring manager in Teams whenever an onboarding task is marked complete — so that the agent only operates on valid data and managers are kept informed without manual follow-up.
 
 ---
 
-## Exercise 3.2 — Enter Your Intent Statement
+> [!NOTE]
+> **Every IBD run looks different — that is expected**
+> IBD uses an LLM to interpret your intent, so the exact wording of clarifying questions, the order of steps, and the content of generated documents will vary between runs and between participants. Your session will not look identical to the screenshots in this guide. **Focus on the steps and the intent, not on matching the screenshots exactly.**
 
-After completing these steps you will have submitted a multi-step business scenario as an intent statement and triggered generation of an MCP tool extension.
+---
 
-This intent is more complex than the previous two — it describes a full workflow with a procurement request, an approval step, and a status update. Even so, the approach is exactly the same: describe what you need in business language, and Joule Studio works out the structure.
+## Exercise 3.1 - Select the Target Agent from the Agent Catalog
 
-In the **Intent Statement** field, copy and paste the following:
+After completing these steps you will have located the Onboarding Task Manager Agent in the Agent Catalog and confirmed that Pre-hooks and Post-hooks are available extension points.
+
+1. Log in to Joule Work using the credentials provided at your desk.
+
+2. In the left navigation panel, select **Develop** to open Joule Studio.
+
+3. On the Joule Studio home screen, click **+ New** and select **Extension** from the tile options.
+
+4. The **Create an Agent Extension** dialog opens. Click the lookup icon next to the **Agent** field to open the Agent Catalog.
+
+5. In the **Agent Catalog**, scroll to find the **Onboarding Task Manager Agent** (V 1.0.0). Click to select it.
+
+   > Use the **Extension Points** filter to narrow the catalog. You can use the **Line of Business** and **Extension Points** filters to narrow the results.
+
+6. The agent detail page opens. Review the **Extension Points** listed:
+   - **Pre-hooks**, **Post-hooks**, **MCP Servers**, **Instruction** are all available
+
+   Confirm that both **Pre-hooks** and **Post-hooks** are listed, then click **Select Agent** to return to the extension form.
+
+---
+
+## Exercise 3.2 - Enter the Intent Statement and Create the Extension
+
+After completing these steps you will have submitted your intent and triggered the IBD flow for a hooks-based extension.
+
+**What IBD does with your intent:**
+
+![Intent-based development in Joule Studio](images/00_ibd_flow.png)
+
+For hooks, IBD generates n8n workflow files rather than just instructions — the pipeline is the same but the artifacts it produces at the Code and Deployment stages are workflow definitions rather than a plain `extension.yaml`.
+
+1. Back in the **Create an Agent Extension** dialog, confirm:
+   - **Agent** is set to **Onboarding Task Manager Agent**
+   - **Name** is **AD264-XXX** — replace **XXX** with your participant number
+   - **Quick Create** is **NOT** checked
+
+2. In the **Intent Statement** field, enter the following text:
+
+   ```
+   Before the Onboarding Task Manager Agent processes any request, use a pre-hook
+   to verify that the new hire's onboarding record exists and is active in SAP
+   SuccessFactors. If the record is missing or in a draft state, block the request
+   and return a message explaining why the agent cannot proceed.
+
+   After the agent marks any onboarding task as complete, use a post-hook to send
+   a Teams notification to the hiring manager with the task name, the new hire's
+   name, and the completion timestamp.
+   ```
+
+   > [!WARNING]
+   > **Fill in the Intent Statement before clicking Create.**
+   > The Intent Statement field is required. Clicking **Create** with an empty field will produce an error. Paste the text above first, confirm it appears in the field, then click **Create**.
+
+---
+
+## Exercise 3.3 - Answer the Clarifying Questions
+
+After completing these steps you will have provided the context IBD needs to generate both hook workflows.
+
+1. Joule Studio begins the IBD flow. Because this intent involves workflow logic rather than just instructions or tools, IBD may ask more detailed clarifying questions than in previous exercises.
+
+   > [!NOTE]
+   > **IBD takes time — this is normal.**
+   > The flow can take anywhere from 5 to 25 minutes depending on system load. There is no visible progress bar. If the screen appears frozen, wait — do not refresh the browser mid-flow as this will lose your session. If nothing has happened after 25 minutes, refresh the browser and reopen your solution from the Joule Studio home screen.
+
+   Examples you may encounter:
+
+   **Pre-hook questions:**
+   - What SuccessFactors API or data field should be checked to determine whether the record is active?
+   - Should the check apply to all requests, or only those that reference a specific new hire?
+   - What message should the agent return if the record is missing?
+
+   **Post-hook questions:**
+   - Which Teams channel or recipient should receive the notification?
+   - Should the notification fire on every task completion, or only for specific task types?
+   - What information should be included in the Teams message body?
+
+   > **Note:** Answer based on the goal — a SuccessFactors record check that blocks bad requests, and a Teams notification that keeps managers informed. There are no fixed right or wrong answers.
+
+2. After all clarifying questions, Joule presents the **Intent Analysis Summary**. Review it to confirm both hooks are captured:
+
+   | Section | What to check |
+   |---|---|
+   | **Business Challenge** | Should mention both the risk of operating on incomplete data and the lack of automatic manager notification |
+   | **Recommended Solution** | Should list two artifacts: a pre-hook workflow (SuccessFactors validation) and a post-hook workflow (Teams notification) |
+   | **Fit Gap Analysis** | Should confirm that both Pre-hooks and Post-hooks are available on this agent |
+
+   When satisfied, type **confirm** and press Enter.
+
+---
+
+## Exercise 3.4 - Review the Product Requirements Document
+
+After completing these steps you will have reviewed the PRD covering both hook requirements and confirmed it to trigger artifact generation.
+
+1. Review the **PRD** on the right panel. Key things to look for:
+
+   - **Pre-hook requirement**: the workflow must query SuccessFactors, evaluate the record status, and return a blocking response if the check fails — *before* the agent processes the request
+   - **Post-hook requirement**: the workflow must extract the completed task name and new hire name from the agent's response context, format a Teams message, and dispatch it — *after* the agent has responded
+   - **Solution Architecture**: two n8n workflows, one wired as a pre-hook and one as a post-hook, with no changes to the base agent's instruction or tools
+
+2. Type **confirm** and press Enter to trigger artifact generation.
+
+---
+
+## Exercise 3.5 - Review the Generated Hook Artifacts
+
+After completing these steps you will have inspected the generated n8n workflow files and the extension.yaml wiring both hooks to the agent.
+
+1. The **Solution Artifacts** panel shows the generated extension. Select it to open the artifact view. Review the **Hooks** section — you should see:
+
+   - **Pre-Hooks** — one entry wired to the SuccessFactors validation workflow
+   - **Post-Hooks** — one entry wired to the Teams notification workflow
+
+   > In Exercises 1 and 2 the extension contained Instructions and MCP Servers. Hooks appear in a separate **Hooks** section of the same artifact view, below Extensions.
+
+2. Open the **File Tree** and locate the generated artifacts. The structure will include:
+
+   | Path | Purpose |
+   |---|---|
+   | `assets/<extension-name>/extension.yaml` | Wires both hooks to the agent |
+   | `assets/<extension-name>/asset.yaml` | Asset descriptor referencing the Onboarding Task Manager Agent |
+   | `assets/<pre-hook-workflow>/workflow.json` | n8n workflow — SuccessFactors record validation |
+   | `assets/<post-hook-workflow>/workflow.json` | n8n workflow — Teams notification on task completion |
+   | `specification/intent.md`, `product-requirements-document.md` | Planning documents |
+
+3. Open **extension.yaml** and review the hooks wiring:
+
+   ```yaml
+   schema-version: "0.1.0"
+   kind: Extension
+
+   metadata:
+     name: "onboarding-hooks-extension"
+
+   agent:
+     id: "sap.agtsftma:agent:sf-task-management-agent:v1"
+
+   capabilityImplementations:
+     - capabilityStyleId: "do_unit"
+       subAbilities: []
+       protocolVersion: 1
+       preHooks:
+         - name: "sf-onboarding-record-validation"
+           description: "Validates that the new hire's onboarding record exists
+             and is active in SAP SuccessFactors before the agent processes
+             the request"
+       postHooks:
+         - name: "teams-task-completion-notification"
+           description: "Sends a Teams notification to the hiring manager when
+             an onboarding task is marked complete"
+   ```
+
+   > Notice what is absent: there is no `instructions` block and no `mcpServers` block. This extension does nothing to the agent's reasoning — it only wraps it. The agent behaves identically to a standard Onboarding Task Manager Agent; the hooks handle everything before and after.
+
+---
+
+## Exercise 3.6 - Understand the Pre-Hook Flow
+
+Before the facilitator demonstration, trace through what the pre-hook does at runtime.
+
+**What happens when a manager sends a request:**
 
 ```
-Create an MCP tool extension for the Onboarding Task Management Agent that connects to Ariba to handle equipment procurement for new hires.
+Manager: "Show me Oscar Lang's onboarding tasks."
 
-The extension should:
-1. Identify onboarding equipment provisioning tasks that are at risk for upcoming new hires.
-2. Determine the required equipment for each new hire based on their onboarding context — for example, laptop, monitor, and headset.
-3. Invoke the Ariba MCP tool with the new hire's name and equipment list to create or identify an existing procurement request.
-4. Before executing, present the proposed action to the user for approval:
-   "A laptop, monitor and headset are required for [Name]. Estimated cost: $X. Create the procurement request?"
-5. After user approval, execute the order in Ariba.
-6. Return the requisition number and fulfillment status from Ariba to the agent.
-7. Use the returned status to inform the user whether the onboarding task is on track for Day 1 readiness.
+  ↓ Pre-hook fires BEFORE the agent sees the message
+
+Pre-hook workflow:
+  1. Extracts "Oscar Lang" from the incoming request context
+  2. Queries SAP SuccessFactors ONB2 API for Oscar's onboarding record
+  3. Evaluates record status:
+     - Status = ACTIVE  →  passes the request through to the agent
+     - Status = DRAFT   →  blocks execution, returns error message
+     - Record not found →  blocks execution, returns error message
+
+  If blocked:
+  Agent never runs. Manager receives:
+  "Oscar Lang's onboarding record is not yet active in SAP SuccessFactors
+   (current status: DRAFT). Please complete the record activation before
+   managing onboarding tasks."
+
+  If passed:
+  Agent runs normally and responds with Oscar's task list.
 ```
 
-Make sure **Quick Create** is checked, then click **Create**.
-
-Once you click Create, Joule Studio begins processing your intent. This takes approximately **5 minutes** — it analyzes the full workflow, derives requirements for the procurement flow and approval gate, builds a technical specification, and generates all the extension files including the MCP tool schema and connector logic.
+**Why this matters:** Without the pre-hook, the agent would attempt to fetch tasks for a new hire whose record isn't ready, producing confusing errors or empty results. The pre-hook makes the failure explicit and actionable before the agent wastes a round trip.
 
 ---
 
-## Exercise 3.3 — Review the Generated Artifacts and Run the Scenario
+## Exercise 3.7 - Understand the Post-Hook Flow
 
-After completing these steps you will have reviewed what Joule Studio produced for an MCP tool extension and understood how the agent uses it at runtime.
+Trace through what the post-hook does at runtime.
 
-### Review the generated project
-
-Once generation completes, open the **Files** tab and explore the full project:
-
-| File | What it is |
-|---|---|
-| `intent.md` | The intent summary — Joule's interpretation of the procurement workflow |
-| `prd.md` | The Product Requirements Document — functional requirements for the Ariba integration, approval gate, and status tracking |
-| `spec.md` | The technical specification — MCP tool schema, Ariba API contract, approval flow logic |
-| `extension.yaml` | Extension descriptor — type `mcp-tool`, MCP server registration, tool manifest |
-| `tool-schema.json` | The tool definition the agent calls — input parameters and output structure |
-| `ariba-connector.js` | The MCP server logic — authenticates to Ariba, constructs the request, returns the result |
-
-Notice how much richer this project is compared to Exercises 1 and 2. The PRD and spec capture the full procurement workflow — including the approval gate and the status mapping back to the onboarding task — before a single line of extension code is written. This is the value of intent-based development: structured, documented, traceable from business requirement all the way through to deployable code.
-
-Click **Save**.
-
-### The conversation this enables
-
-Once deployed, here's the kind of conversation the agent can have:
+**What happens after the agent marks a task complete:**
 
 ```
-User:   "What onboarding tasks are at risk for next week's new hires?"
+Manager: "Mark 'Sign Employment Contract' as complete for Priya."
 
-Agent:  "Priya's equipment provisioning task is still pending and could
-         impact her Day 1 readiness."
+Agent runs, marks the task, responds:
+  "Done. 'Sign Employment Contract' has been marked complete for Priya Sharma."
 
-User:   "Can you do something about it?"
+  ↓ Post-hook fires AFTER the agent responds
 
-Agent:  "Yes. A laptop, monitor and headset are required for Priya.
-         Estimated cost: $2,400. Should I create the procurement
-         request in Ariba?"
+Post-hook workflow:
+  1. Receives the agent's response context
+  2. Extracts: task name = "Sign Employment Contract",
+               new hire = "Priya Sharma",
+               timestamp = 2026-10-21 14:32 UTC
+  3. Formats Teams message:
+     ✅ Onboarding task completed
+     New hire: Priya Sharma
+     Task: Sign Employment Contract
+     Completed: 21 Oct 2026, 14:32 UTC
+     Completed by: [manager name]
+  4. Posts to hiring manager's Teams channel
 
-User:   "Go ahead."
-
-Agent:  "Done. Requisition #12345 has been created in Ariba and is
-         now pending fulfillment. Priya's equipment should arrive
-         before her start date."
+Manager sees the agent response AND receives the Teams notification.
 ```
 
-That's the full loop — detection, proposal, approval, execution, confirmation — inside a single conversation. No switching between systems, no manual Ariba navigation, no email chains.
+**Why this matters:** The manager gets confirmation in the tool they already use. No one needs to check Joule — the notification arrives where attention already is. And because the post-hook fires from the agent's response context, no extra prompt or manual action is needed.
 
-> **Please stop here and don't deploy.** Your facilitator will walk through the full deployment and demonstrate the running extension live. Deployment can take a few minutes, so it will be shown rather than completed individually.
+---
+
+> [!WARNING]
+> **Stop here — do not click Deploy**
+> Deployment requires the **Joule Studio Administrator** role, which participants do not hold in this workshop environment. **Do not select the Deploy button.**
+>
+> **One extension per agent, per tenant.** Only one extension can be active on an agent at a time. Deploying your individual extension would overwrite every other participant's work on the shared tenant. This is why deployment is handled exclusively by the facilitator.
+>
+> Your hands-on work is complete: you have built the hooks extension and reviewed both n8n workflow artifacts.
 
 ---
 
 ## Summary
 
-You've now built all three extension types: an Instructions Extension that shapes what the agent says, a Hooks Extension that intercepts every interaction at the execution level, and an MCP Tool Extension that gives the agent the ability to act in an external system.
+You have built a hooks-based extension for the Onboarding Task Manager Agent — the most advanced extension type in this session. Across the three exercises, you have now covered the full spectrum of what agent extensions can do:
 
-Every one of them started with a plain language description. Every one produced a complete project — intent, requirements, specification, and working extension files. Joule Studio handled the translation.
+| Exercise | Type | What it changed |
+|---|---|---|
+| Exercise 1 | Instruction Extension | How the agent reasons and responds |
+| Exercise 2 | MCP Extension | What the agent can do (Ariba tool) |
+| **Exercise 3** | **Pre-Hook + Post-Hook** | **What happens before and after the agent runs** |
 
-That's the pattern — and it works for any pre-delivered SAP agent in your landscape.
+Together, these three extension types cover the full surface area of agent extensibility in Joule Studio — without touching the source code of the pre-delivered Onboarding Task Manager Agent.
 
-**Happy TechEd 🎉**
+> [!NOTE]
+> **Current GA scope for Pre-Hook & Post-Hook Extensions**
+>
+> ![GA and EAC scope](images/00_ga_scope.png)
+>
+> At GA, only Instruction Extensions support full deployment and live runtime in this environment. Hooks are EAC scope — the full creation flow is hands-on but deployment is not available. The runtime flows in Exercises 3.6 and 3.7 illustrate what the deployed hooks would do; your facilitator will walk through them on screen.
 
----
-
-[Back: Exercise 2 — Add Traceability with Pre and Post Hooks](../ex2/)
-[Back to Overview](../../README.md)
+Return to - [Session Overview](../../README.md)

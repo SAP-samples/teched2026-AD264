@@ -1,14 +1,20 @@
-# AD264 — From Intent to Action: Extending SAP Agents with Joule Studio
+# AD264 — Building Enterprise Agent Extensions with SAP Joule Studio
 
 ## Description
 
-This repository contains the material for the SAP TechEd 2026 session **AD264 — From Intent to Action: Extending SAP Agents with Joule Studio**.
+This repository contains the exercise guide for the SAP TechEd 2026 session **AD264 — Building Enterprise Agent Extensions with SAP Joule Studio**.
 
 ## Overview
 
-Pre-delivered SAP agents are powerful out of the box. But the moment you sit down with a real HR team or a real onboarding process, you quickly discover the gaps. The Onboarding Task Management Agent can answer questions — but it can't label its own responses as AI-generated, it doesn't trace who asked what, and it has no way to reach into Ariba when a new hire's equipment isn't ordered yet.
+Pre-delivered SAP agents are powerful out of the box. But the moment you sit down with a real HR team or a real onboarding process, you quickly discover the gaps. In this session, you'll close those gaps yourself — using Joule Studio's Intent-Based Development to describe the behaviour you need in plain language and watch it become a working extension. No boilerplate, no manual configuration, no specialist development skills required.
 
-In this session, you'll close those gaps yourself. Using Joule Studio's intent-based development, you'll describe the behaviour you need in plain language and watch it become a working extension — no boilerplate, no manual configuration, no specialist development skills required. By the end of the session, you'll have built three different extension types and have a pattern you can take home and apply to any pre-delivered SAP agent in your landscape.
+By the end of the session, you'll have built agent extensions across multiple extension types and have a pattern you can take home and apply to any pre-delivered SAP agent in your landscape.
+
+### How Joule Studio fits into the SAP AI runtime
+
+![Joule Studio Runtime: Agent Flow](exercises/ex1/images/00_runtime_agent_flow.png)
+
+Joule Studio is where you **build**. Once deployed via Custom Artifact Deployment (CAD), your extension runs inside the **Joule Studio Runtime** — the same runtime that powers pre-delivered SAP agents. The Agent Gateway handles outbound calls to MCP servers, LoB systems, and other integrations. Extensions you build in this session slot directly into this architecture.
 
 ## Requirements
 
@@ -16,26 +22,37 @@ All system access required for this session will be provided to you. During the 
 
 - **SAP Joule Works** with the pre-delivered Onboarding Task Management Agent
 - **SAP Joule Studio** (Intent-Based Development)
-- **SAP Ariba** integration via MCP (Exercise 3)
+- **SAP Ariba** integration via MCP (Exercise 2)
 
 Credentials and tenant URL will be provided at your desk.
 
+## The Agent You Will Extend
+
+All three exercises use the same pre-delivered SAP agent: the **Onboarding Task Management Agent**.
+
+![Task Onboarding Agent](exercises/ex1/images/00_onboarding_agent_overview.png)
+
+This agent transforms onboarding execution from manual tracking to informed decision-making — continuously evaluating and ranking tasks across all hires using a composite risk score. It highlights what needs immediate attention, identifies blockers, and recommends next best actions for Hiring Managers and Onboarding Coordinators.
+
+Out of the box it already does a lot. In this session you will extend it to do more — enforcing compliance prioritization, raising Ariba procurement requests, and adding pre/post execution hooks — all without touching its source code.
+
+### The extensibility opportunity
+
+![Agent Extensibility Use Case: Onboarding](exercises/ex1/images/00_use_case_onboarding.png)
+
+### The extension types you will use
+
+![Add multiple extension points to adapt Joule agents](exercises/ex1/images/00_extension_points_overview.png)
+
+### Where it all fits: reference architecture
+
+![Reference Architecture - Agent Extensions](exercises/ex1/images/00_reference_architecture.png)
+
 ## Exercises
 
-- [Exercise 1 — Add an AI Compliance Disclaimer](exercises/ex1/)
-  - [Exercise 1.1 — Open Joule Studio and create a new extension](exercises/ex1/#exercise-11--open-joule-studio-and-create-a-new-extension)
-  - [Exercise 1.2 — Enter your intent statement](exercises/ex1/#exercise-12--enter-your-intent-statement)
-  - [Exercise 1.3 — Review the generated artifacts and explore Joule Studio](exercises/ex1/#exercise-13--review-the-generated-artifacts-and-explore-joule-studio)
-
-- [Exercise 2 — Add Traceability with Pre and Post Hooks](exercises/ex2/)
-  - [Exercise 2.1 — Create a new hooks extension](exercises/ex2/#exercise-21--create-a-new-hooks-extension)
-  - [Exercise 2.2 — Enter your intent statement](exercises/ex2/#exercise-22--enter-your-intent-statement)
-  - [Exercise 2.3 — Review the generated artifacts](exercises/ex2/#exercise-23--review-the-generated-artifacts)
-
-- [Exercise 3 — Connect the Agent to Ariba for Equipment Procurement](exercises/ex3/)
-  - [Exercise 3.1 — Create a new MCP tool extension](exercises/ex3/#exercise-31--create-a-new-mcp-tool-extension)
-  - [Exercise 3.2 — Enter your intent statement](exercises/ex3/#exercise-32--enter-your-intent-statement)
-  - [Exercise 3.3 — Review the generated artifacts and run the scenario](exercises/ex3/#exercise-33--review-the-generated-artifacts-and-run-the-scenario)
+- [Exercise 1 — Extend the Onboarding Task Manager Agent: Instruction Extension - Compliance Task Prioritization](exercises/ex1/)
+- [Exercise 2 — Extend the Onboarding Task Manager Agent: MCP Extension – SAP Ariba Equipment Ordering](exercises/ex2/)
+- [Exercise 3 ★ Bonus — Extend the Onboarding Task Manager Agent: Pre-Hook & Post-Hook](exercises/ex3/)
 
 ## Contributing
 
@@ -51,4 +68,4 @@ Support for the content in this repository is available during the actual time o
 
 ## License
 
-Copyright (2026) SAP SE or an SAP affiliate company and contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available via the [REUSE tool](https://api.reuse.software/info/github.com/SAP-samples/AD264).
+Copyright (2026) SAP SE or an SAP affiliate company and contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available via the [REUSE tool](https://api.reuse.software/info/github.com/SAP-samples/teched2026-AD264).
