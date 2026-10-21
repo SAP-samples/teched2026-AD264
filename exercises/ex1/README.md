@@ -18,6 +18,7 @@ Onboarding task lists are long. A typical new hire onboarding plan contains 20�
 
 By building this as an **Instruction Extension**, the prioritization is enforced at the agent level — not through UI customization, filtering, or post-processing. Every response the Onboarding Task Manager Agent produces for a manager will reflect the rule, with no exceptions and no manual sorting required.
 
+---
 
 > [!NOTE]
 > **Every IBD run looks different — that is expected**
