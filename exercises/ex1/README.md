@@ -210,8 +210,6 @@ After completing these steps you will have inspected the generated `extension.ya
 >
 > Your facilitator will deploy a single shared extension and demonstrate the Onboarding Task Manager Agent running live with compliance task prioritization. You will see the deployed runtime on the facilitator's screen.
 
-<br>![](images/13_deployment_running.png)
-
 ---
 
 ## Summary
