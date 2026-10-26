@@ -30,7 +30,7 @@ By building this as an **Instruction Extension**, the prioritization is enforced
 
 After completing these steps you will have opened Joule Studio and started creating a new Agent Extension targeting the Onboarding Task Manager Agent.
 
-1. Log in to Joule Work using the credentials provided at your desk.
+1. Log in to Joule Work at **[https://747238487.eu10.sapdas.cloud.sap/new/conversations/](https://747238487.eu10.sapdas.cloud.sap/new/conversations/)** using the credentials provided at your desk.
 
 2. In the left navigation panel, select **Develop** to open Joule Studio.
 
