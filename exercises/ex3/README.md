@@ -45,7 +45,7 @@ Hooks run as n8n workflows. They are not part of the agent's reasoning loop — 
 
 After completing these steps you will have located the Onboarding Task Manager Agent in the Agent Catalog and confirmed that Pre-hooks and Post-hooks are available extension points.
 
-1. Log in to Joule Work using the credentials provided at your desk.
+1. Log in to Joule Work at **[https://747238487.eu10.sapdas.cloud.sap/new/conversations/](https://747238487.eu10.sapdas.cloud.sap/new/conversations/)** using the credentials provided at your desk.
 
 2. In the left navigation panel, select **Develop** to open Joule Studio.
 
