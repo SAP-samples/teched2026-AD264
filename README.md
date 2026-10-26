@@ -103,7 +103,9 @@ All system access required for this session will be provided to you. During the 
 - **SAP Joule Studio** (Intent-Based Development)
 - **SAP Ariba** integration via MCP (Exercise 2)
 
-Credentials and tenant URL will be provided at your desk.
+Tenant URL: **[https://747238487.eu10.sapdas.cloud.sap/new/conversations/](https://747238487.eu10.sapdas.cloud.sap/new/conversations/)**
+
+Credentials will be provided at your desk.
 
 ---
 
