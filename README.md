@@ -111,6 +111,7 @@ Credentials will be provided at your desk.
 
 ## Exercises
 
+- [Exercise 0 — Log In and Try the Onboarding Assistant Agent](exercises/ex0/)
 - [Exercise 1 — Extend the Onboarding Task Manager Agent: Instruction Extension - Compliance Task Prioritization](exercises/ex1/)
 - [Exercise 2 — Extend the Onboarding Task Manager Agent: MCP Extension – SAP Ariba Equipment Ordering](exercises/ex2/)
 - [Exercise 3 ★ Bonus — Extend the Onboarding Task Manager Agent: Pre-Hook & Post-Hook](exercises/ex3/)
