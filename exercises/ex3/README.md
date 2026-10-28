@@ -35,7 +35,7 @@ Hooks run as n8n workflows. They are not part of the agent's reasoning loop — 
 
 ---
 
-> [!NOTE]
+> [!IMPORTANT]
 > **Every IBD run looks different — that is expected**
 > IBD uses an LLM to interpret your intent, so the exact wording of clarifying questions, the order of steps, and the content of generated documents will vary between runs and between participants. Your session will not look identical to the screenshots in this guide. **Focus on the steps and the intent, not on matching the screenshots exactly.**
 
@@ -45,7 +45,7 @@ Hooks run as n8n workflows. They are not part of the agent's reasoning loop — 
 
 After completing these steps you will have located the Onboarding Task Manager Agent in the Agent Catalog and confirmed that Pre-hooks and Post-hooks are available extension points.
 
-1. Log in to Joule Work at **[https://747238487.eu10.sapdas.cloud.sap/new/conversations/](https://747238487.eu10.sapdas.cloud.sap/new/conversations/)** using the credentials provided at your desk.
+1. Return to Joule Work at **[https://747238487.eu10.sapdas.cloud.sap/new/conversations/](https://747238487.eu10.sapdas.cloud.sap/new/conversations/)** — you should still be logged in from the previous exercises.
 
 2. In the left navigation panel, select **Develop** to open Joule Studio.
 
@@ -54,8 +54,6 @@ After completing these steps you will have located the Onboarding Task Manager A
 4. The **Create an Agent Extension** dialog opens. Click the lookup icon next to the **Agent** field to open the Agent Catalog.
 
 5. In the **Agent Catalog**, scroll to find the **Onboarding Task Manager Agent** (V 1.0.0). Click to select it.
-
-   > Use the **Extension Points** filter to narrow the catalog. You can use the **Line of Business** and **Extension Points** filters to narrow the results.
 
 6. The agent detail page opens. Review the **Extension Points** listed:
    - **Pre-hooks**, **Post-hooks**, **MCP Servers**, **Instruction** are all available
@@ -120,7 +118,8 @@ After completing these steps you will have provided the context IBD needs to gen
    - Should the notification fire on every task completion, or only for specific task types?
    - What information should be included in the Teams message body?
 
-   > **Note:** Answer based on the goal — a SuccessFactors record check that blocks bad requests, and a Teams notification that keeps managers informed. There are no fixed right or wrong answers.
+   > [!NOTE]
+   > Answer based on the goal — a SuccessFactors record check that blocks bad requests, and a Teams notification that keeps managers informed. There are no fixed right or wrong answers.
 
 2. After all clarifying questions, Joule presents the **Intent Analysis Summary**. Review it to confirm both hooks are captured:
 
@@ -267,7 +266,7 @@ Manager sees the agent response AND receives the Teams notification.
 
 ---
 
-> [!WARNING]
+> [!CAUTION]
 > **Stop here — do not click Deploy**
 > Deployment requires the **Joule Studio Administrator** role, which participants do not hold in this workshop environment. **Do not select the Deploy button.**
 >

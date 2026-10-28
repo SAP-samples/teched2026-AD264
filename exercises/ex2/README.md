@@ -33,7 +33,7 @@ An MCP Extension uses the **Agent Gateway → MCP Server** path in this architec
 
 ---
 
-> [!NOTE]
+> [!IMPORTANT]
 > **Every IBD run looks different — that is expected**
 > IBD uses an LLM to interpret your intent, so the exact wording of clarifying questions, the order of steps, and the content of generated documents will vary between runs and between participants. Your session will not look identical to the screenshots in this guide. **Focus on the steps and the intent, not on matching the screenshots exactly.**
 
@@ -47,14 +47,16 @@ After completing these steps you will have located the Onboarding Task Manager A
 
    > Use the **Extension Points** filter and select **MCP Servers** to narrow the catalog to agents that support tool integrations.
 
-<br>![](images/04_agent_catalog.png)
+
+![](images/04_agent_catalog.png)
 
 2. The agent detail page opens. Review the **Extension Points** listed:
    - **Pre-hooks**, **Post-hooks**, **MCP Servers**, **Instruction** are all available
 
    Confirm that **MCP Servers** is listed, then click **Select Agent** to return to the extension form.
 
-<br>![](images/05_agent_detail.png)
+
+![](images/05_agent_detail.png)
 
 ---
 
@@ -90,9 +92,8 @@ The same pipeline runs for an MCP extension — Joule Studio will additionally a
    > [!WARNING]
    > **Fill in the Intent Statement before clicking Create.**
    > The Intent Statement field is required. Clicking **Create** with an empty field will produce an error. Paste the text above first, confirm it appears in the field, then click **Create**.
-   ```
 
-<br>![](images/06_intent_statement.png)
+![](images/06_intent_statement.png)
 
 ---
 
@@ -106,7 +107,8 @@ After completing these steps you will have provided the business context that Jo
    > **IBD takes time — this is normal.**
    > The flow can take anywhere from 5 to 25 minutes depending on system load. There is no visible progress bar. If the screen appears frozen, wait — do not refresh the browser mid-flow as this will lose your session. If nothing has happened after 25 minutes, refresh the browser and reopen your solution from the Joule Studio home screen.
 
-<br>![](images/07_ibd_processing.png)
+
+![](images/07_ibd_processing.png)
 
 2. Joule will ask clarifying questions to understand the tool integration. Questions may include:
 
@@ -114,9 +116,11 @@ After completing these steps you will have provided the business context that Jo
    - Should the agent present a cost estimate before executing?
    - What information should be returned to the onboarding task once the requisition is created?
 
-   > **Note:** These questions are generated dynamically. Read each question and respond based on the goal: a human-approved, Ariba-backed equipment order that returns a requisition ID to the onboarding context. There are no fixed right or wrong answers.
+   > [!NOTE]
+   > These questions are generated dynamically. Read each question and respond based on the goal: a human-approved, Ariba-backed equipment order that returns a requisition ID to the onboarding context. There are no fixed right or wrong answers.
 
-<br>![](images/08_clarifying_questions.png)
+
+![](images/08_clarifying_questions.png)
 
 ---
 
@@ -156,7 +160,8 @@ After completing these steps you will have reviewed the generated PRD and confir
 
 2. Type **confirm** in the input field and press Enter to trigger artifact generation.
 
-<br>![](images/09_prd_full.png)
+
+![](images/09_prd_full.png)
 
 ---
 
@@ -173,7 +178,8 @@ After completing these steps you will have inspected the generated extension art
    - **Instructions and Context** — the `Instruction` row shows the equipment procurement rule the agent will follow. Click to expand it and read the full instruction text.
    - **Extensions** — the `MCP Servers` row shows **sap_self** wired as the MCP server. This is the SAP S/4HANA purchase requisition service the agent will call to create the procurement request.
 
-<br>![](images/10_solution_artifacts_mcp.png)
+
+![](images/10_solution_artifacts_mcp.png)
 
 2. Open the **File Tree** to review the generated file structure. You will see:
 
@@ -187,7 +193,8 @@ After completing these steps you will have inspected the generated extension art
    | `specification/product-requirements-document.md` | Generated PRD |
    | `specification/solution.yaml` | Solution metadata |
 
-<br>![](images/12_file_tree.png)
+
+![](images/12_file_tree.png)
 
 3. Open **assets > ariba-equipment-procurement-agent-extension > extension.yaml**. The key structure to note:
 
@@ -259,7 +266,7 @@ Agent:   "Done. Ariba requisition REQ-2026-004822 raised for Priya's equipment.
 
 ---
 
-> [!WARNING]
+> [!CAUTION]
 > **Stop here — do not click Deploy**
 > Deployment requires the **Joule Studio Administrator** role, which participants do not hold in this workshop environment. **Do not select the Deploy button.**
 >
